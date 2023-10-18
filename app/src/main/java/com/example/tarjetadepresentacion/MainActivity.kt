@@ -124,15 +124,23 @@ fun PresentacionVertical(modifier: Modifier = Modifier) {
     }
 
 }
+/*
+  val uri = "tel:" + "435678968"
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(uri)
+            startActivity(intent)
+     */
+
+}
 
 @Composable
 fun Caja() {
     val imagen = painterResource(R.drawable.android_logo)
-    BoxWithConstraints {
+    BoxWithConstraints (Modifier.fillMaxSize()){
         if (maxWidth < 500.dp) {
             Alignment.Center
             Column(
-                Modifier.background(color = Color.DarkGray),
+                Modifier.background(color = Color.DarkGray).fillMaxSize(),
                 verticalArrangement = Arrangement.Center
             ) {
                 Image(
@@ -163,7 +171,7 @@ fun Caja() {
             }
         } else {
             Row(
-                Modifier.background(color = Color.DarkGray),
+                Modifier.background(color = Color.DarkGray).fillMaxSize(),
                 horizontalArrangement = Arrangement.Start
             ) {
                 Image(
