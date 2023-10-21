@@ -1,8 +1,12 @@
 package com.example.tarjetadepresentacion
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -16,6 +20,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -52,6 +61,17 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+fun copyToClipboard(context: Context, text: String, textToast: String?) {
+    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("Texto copiado", text)
+    clipboard.setPrimaryClip(clip)
+
+
+    textToast?.let {
+        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+    }
+}
+
 @Composable
 fun PresentacionHorizontal(modifier: Modifier = Modifier) {
     val imagen = painterResource(R.drawable.android_logo)
@@ -60,6 +80,12 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
     val iconoMail = painterResource(R.drawable.mail)
     val phone = "+34 634 50 62 29"
     val context = LocalContext.current
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_EMAIL, arrayOf("rubenarranz04@gmail.com")) // recipients
+        putExtra(Intent.EXTRA_SUBJECT, "Presentación")
+        putExtra(Intent.EXTRA_TEXT, "Prueba de presentación")
+    }
     Column(
         Modifier
             .background(color = Color.Gray)
@@ -106,11 +132,11 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
 
             )
         }
-        Row (
+        Row(
             Modifier
                 .align(alignment = Alignment.CenterHorizontally)
                 .padding(bottom = 40.dp)
-        ){
+        ) {
             Image(
                 painter = iconoTelefono,
                 contentDescription = null,
@@ -132,19 +158,27 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
                     modifier = Modifier
                 )
             }
-            Image(
-                painter = iconoMail,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(end = 12.dp, start = 16.dp)
-                    .align(alignment = Alignment.CenterVertically)
-            )
-            Text(
-                text = "rubenarranz04@gmail.com",
-                textDecoration = TextDecoration.Underline,
-                modifier = Modifier
-                    .align(alignment = Alignment.CenterVertically)
-            )
+            IconButton(onClick = { startActivity(context, intent, null) },
+                Modifier.align(alignment = Alignment.CenterVertically
+                )) {
+                Icon(
+                    Icons.Filled.Email,
+                    contentDescription = null,
+                    tint = Color.Black
+                )
+            }
+            TextButton(
+                onClick = {
+                    val textToCopy = "rubenarranz04@gmail.com"
+                    copyToClipboard(context, textToCopy, "Texto copiado al portapapeles")
+                },
+            ) {
+                Text(
+                    text = "rubenarranz04@gmail.com",
+                    color = Color.White,
+                    textDecoration = TextDecoration.Underline
+                )
+            }
 
         }
     }
@@ -157,6 +191,12 @@ fun PresentacionVertical(modifier: Modifier = Modifier) {
     val iconoMail = painterResource(R.drawable.mail)
     val phone = "+34 634 50 62 29"
     val context = LocalContext.current
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_EMAIL, arrayOf("rubenarranz04@gmail.com")) // recipients
+        putExtra(Intent.EXTRA_SUBJECT, "Presentación")
+        putExtra(Intent.EXTRA_TEXT, "Prueba de presentación")
+    }
     Column(
         Modifier
             .background(color = Color.Gray)
@@ -206,6 +246,7 @@ fun PresentacionVertical(modifier: Modifier = Modifier) {
                     contentDescription = null,
                     modifier = Modifier
                         .align(alignment = Alignment.CenterVertically)
+                        .padding(start = 12.dp, end = 12.dp)
                 )
                 TextButton(
                     onClick = {
@@ -227,21 +268,50 @@ fun PresentacionVertical(modifier: Modifier = Modifier) {
                 Modifier
                     .align(alignment = Alignment.CenterHorizontally)
             ) {
-                Image(
-                    painter = iconoMail,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(end = 12.dp)
-                )
-                Text(
-                    text = "rubenarranz04@gmail.com",
-                    textDecoration = TextDecoration.Underline
-                )
+                IconButton(onClick = { startActivity(context, intent, null) },
+                    Modifier.align(alignment = Alignment.CenterVertically
+                    )) {
+                    Icon(
+                        Icons.Filled.Email,
+                        contentDescription = null,
+                        tint = Color.Black
+                    )
+                }
+                TextButton(
+                    onClick = {
+                        val textToCopy = "rubenarranz04@gmail.com"
+                        copyToClipboard(context, textToCopy, "Texto copiado al portapapeles")
+                    },
+                ) {
+                    Text(
+                        text = "rubenarranz04@gmail.com",
+                        color = Color.White,
+                        textDecoration = TextDecoration.Underline
+                    )
+                }
             }
         }
     }
-
 }
+
+@Composable
+fun Prueba () {
+    val phone = "983245897"
+    val context = LocalContext.current
+    TextButton(
+        onClick = {
+            val textPhone = "tel: $phone"
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse(textPhone)
+            startActivity(context, intent, null)
+        },
+    ) {
+        Text(
+            text = phone,
+        )
+    }
+}
+
 
 @Composable
 fun ProductoFinal() {
