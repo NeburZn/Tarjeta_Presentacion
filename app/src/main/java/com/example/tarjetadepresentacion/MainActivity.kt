@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -77,7 +76,6 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
     val imagen = painterResource(R.drawable.android_logo)
     val fotoMia = painterResource(R.drawable.foto_de_mi)
     val iconoTelefono = painterResource(R.drawable.telefono)
-    val iconoMail = painterResource(R.drawable.mail)
     val phone = "+34 634 50 62 29"
     val context = LocalContext.current
     val intent = Intent(Intent.ACTION_SEND).apply {
@@ -146,9 +144,9 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
             TextButton(
                 onClick = {
                     val textPhone = "tel: $phone"
-                    val intent = Intent(Intent.ACTION_DIAL)
-                    intent.data = Uri.parse(textPhone)
-                    startActivity(context, intent, null)
+                    val intentTelefono = Intent(Intent.ACTION_DIAL)
+                    intentTelefono.data = Uri.parse(textPhone)
+                    startActivity(context, intentTelefono, null)
                 },
                 Modifier.align(alignment = Alignment.Bottom)
             ) {
@@ -188,7 +186,6 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
 fun PresentacionVertical(modifier: Modifier = Modifier) {
     val imagen = painterResource(R.drawable.android_logo)
     val iconoTelefono = painterResource(R.drawable.telefono)
-    val iconoMail = painterResource(R.drawable.mail)
     val phone = "+34 634 50 62 29"
     val context = LocalContext.current
     val intent = Intent(Intent.ACTION_SEND).apply {
@@ -251,9 +248,9 @@ fun PresentacionVertical(modifier: Modifier = Modifier) {
                 TextButton(
                     onClick = {
                         val textPhone = "tel: $phone"
-                        val intent = Intent(Intent.ACTION_DIAL)
-                        intent.data = Uri.parse(textPhone)
-                        startActivity(context, intent, null)
+                        val intentMarcar = Intent(Intent.ACTION_DIAL)
+                        intentMarcar.data = Uri.parse(textPhone)
+                        startActivity(context, intentMarcar, null)
                     },
                     Modifier.align(alignment = Alignment.CenterVertically)
                 ) {
@@ -315,7 +312,6 @@ fun Prueba () {
 
 @Composable
 fun ProductoFinal() {
-    val imagen = painterResource(R.drawable.android_logo)
     BoxWithConstraints(Modifier.fillMaxSize()) {
         if (maxWidth < 500.dp) {
             PresentacionVertical()
