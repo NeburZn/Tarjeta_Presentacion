@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,15 +14,19 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -29,14 +34,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
@@ -76,13 +85,13 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
     val imagen = painterResource(R.drawable.android_logo)
     val fotoMia = painterResource(R.drawable.foto_de_mi)
     val iconoTelefono = painterResource(R.drawable.telefono)
-    val phone = "+34 634 50 62 29"
+    val phone = stringResource(R.string.telefono)
     val context = LocalContext.current
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
-        putExtra(Intent.EXTRA_EMAIL, arrayOf("rubenarranz04@gmail.com")) // recipients
+        putExtra(Intent.EXTRA_EMAIL, arrayOf(stringResource(R.string.correo))) // recipients
         putExtra(Intent.EXTRA_SUBJECT, "Presentación")
-        putExtra(Intent.EXTRA_TEXT, "Prueba de presentación")
+        putExtra(Intent.EXTRA_TEXT, "¿No me das el 10?")
     }
     Column(
         Modifier
@@ -108,14 +117,14 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
             )
             Column {
                 Text(
-                    text = "Rubén Arranz",
+                    text = stringResource(R.string.nombre),
                     fontSize = 50.sp,
                     color = Color.White,
                     modifier = Modifier
                         .padding(top = 16.dp)
                 )
                 Text(
-                    text = "Estudiante de DAM",
+                    text = stringResource(R.string.estudio),
                     color = Color.Green,
                     fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
                     modifier = Modifier
@@ -156,9 +165,12 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
                     modifier = Modifier
                 )
             }
-            IconButton(onClick = { startActivity(context, intent, null) },
-                Modifier.align(alignment = Alignment.CenterVertically
-                )) {
+            IconButton(
+                onClick = { startActivity(context, intent, null) },
+                Modifier.align(
+                    alignment = Alignment.CenterVertically
+                )
+            ) {
                 Icon(
                     Icons.Filled.Email,
                     contentDescription = null,
@@ -172,7 +184,7 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
                 },
             ) {
                 Text(
-                    text = "rubenarranz04@gmail.com",
+                    text = stringResource(R.string.correo),
                     color = Color.White,
                     textDecoration = TextDecoration.Underline
                 )
@@ -183,23 +195,28 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PresentacionVertical(modifier: Modifier = Modifier) {
+fun PresentacionVertical() {
     val imagen = painterResource(R.drawable.android_logo)
+    val fotoMia = painterResource(R.drawable.foto_de_mi)
+    var tamanio = remember{ mutableStateOf(100.dp) }
+    var count = remember { mutableStateOf(0) }
     val iconoTelefono = painterResource(R.drawable.telefono)
-    val phone = "+34 634 50 62 29"
+    val phone = stringResource(R.string.telefono)
+    var pinchar: Boolean = false
     val context = LocalContext.current
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_EMAIL, arrayOf("rubenarranz04@gmail.com")) // recipients
         putExtra(Intent.EXTRA_SUBJECT, "Presentación")
-        putExtra(Intent.EXTRA_TEXT, "Prueba de presentación")
+        putExtra(Intent.EXTRA_TEXT, "Me merezco un 10 profe")
     }
     Column(
         Modifier
             .background(color = Color.Gray)
+            .padding(top = 90.dp, bottom = 80.dp)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceAround
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
             verticalArrangement = Arrangement.Center
@@ -215,7 +232,7 @@ fun PresentacionVertical(modifier: Modifier = Modifier) {
                     .border(BorderStroke(2.dp, Color.Black))
             )
             Text(
-                text = "Rubén Arranz",
+                text = stringResource(R.string.nombre),
                 fontSize = 50.sp,
                 color = Color.White,
                 modifier = Modifier
@@ -223,11 +240,29 @@ fun PresentacionVertical(modifier: Modifier = Modifier) {
                     .padding(top = 16.dp)
             )
             Text(
-                text = "Estudiante de DAM",
+                text = stringResource(R.string.estudio),
                 color = Color.Green,
                 fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
                 modifier = Modifier
                     .align(alignment = Alignment.CenterHorizontally)
+            )
+        }
+        Box {
+            Modifier.align(alignment = Alignment.Center)
+            Image(
+                painter = fotoMia,
+                contentDescription = null,
+                modifier = Modifier
+                    .clickable {
+                        tamanio.value =
+                            if (count.value % 2 == 0) {
+                                300.dp
+                            } else {
+                                100.dp
+                            }
+                        count.value += 1
+                    }
+                    .size(tamanio.value)
             )
         }
         Column(
@@ -265,9 +300,12 @@ fun PresentacionVertical(modifier: Modifier = Modifier) {
                 Modifier
                     .align(alignment = Alignment.CenterHorizontally)
             ) {
-                IconButton(onClick = { startActivity(context, intent, null) },
-                    Modifier.align(alignment = Alignment.CenterVertically
-                    )) {
+                IconButton(
+                    onClick = { startActivity(context, intent, null) },
+                    Modifier.align(
+                        alignment = Alignment.CenterVertically
+                    )
+                ) {
                     Icon(
                         Icons.Filled.Email,
                         contentDescription = null,
@@ -281,7 +319,7 @@ fun PresentacionVertical(modifier: Modifier = Modifier) {
                     },
                 ) {
                     Text(
-                        text = "rubenarranz04@gmail.com",
+                        text = stringResource(R.string.correo),
                         color = Color.White,
                         textDecoration = TextDecoration.Underline
                     )
@@ -291,8 +329,29 @@ fun PresentacionVertical(modifier: Modifier = Modifier) {
     }
 }
 
+
 @Composable
-fun Prueba () {
+fun MiFotoGrande(modifier: Modifier): Float {
+    var tamanio: Float = 0.2f
+    var grande: Boolean = false
+    /*
+    Button(
+        onClick = {
+        },
+        modifier = Modifier.fillMaxSize(0.3f)
+    ) {
+        Image(
+            painter = fotoMia,
+            contentDescription = "mi foto",
+            modifier = Modifier.fillMaxSize(2f)
+        )
+    }
+    */
+    return tamanio
+}
+
+@Composable
+fun Prueba() {
     val phone = "983245897"
     val context = LocalContext.current
     TextButton(
