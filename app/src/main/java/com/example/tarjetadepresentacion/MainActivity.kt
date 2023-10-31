@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,9 +23,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,19 +38,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import com.example.tarjetadepresentacion.ui.theme.TarjetaDePresentacionTheme
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,10 +82,19 @@ fun copyToClipboard(context: Context, text: String, textToast: String?) {
 }
 
 @Composable
-fun PresentacionHorizontal(modifier: Modifier = Modifier) {
+fun PresentacionHorizontal() {
     val imagen = painterResource(R.drawable.android_logo)
     val fotoMia = painterResource(R.drawable.foto_de_mi)
     val iconoTelefono = painterResource(R.drawable.telefono)
+    val hubGit = painterResource(R.drawable.hub)
+    val webIntent: Intent =
+        Uri.parse("https://www.instagram.com/rubeen._04/?next=%2F").let { webpage ->
+            Intent(Intent.ACTION_VIEW, webpage)
+        }
+    val gitHubIntent: Intent =
+        Uri.parse("https://github.com/NeburZn").let { pagina ->
+            Intent(Intent.ACTION_VIEW, pagina)
+        }
     val phone = stringResource(R.string.telefono)
     val context = LocalContext.current
     val intent = Intent(Intent.ACTION_SEND).apply {
@@ -126,10 +136,110 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
                 Text(
                     text = stringResource(R.string.estudio),
                     color = Color.Green,
-                    fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                    fontStyle = FontStyle.Italic,
                     modifier = Modifier
                         .align(alignment = Alignment.End)
                 )
+                Row (
+                    Modifier
+                        .align(alignment = Alignment.CenterHorizontally)
+                        .padding(top = 60.dp)
+                ) {
+                    Image(
+                        painter = iconoTelefono,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterVertically)
+                    )
+                    TextButton(
+                        onClick = {
+                            val textPhone = "tel: $phone"
+                            val intentTelefono = Intent(Intent.ACTION_DIAL)
+                            intentTelefono.data = Uri.parse(textPhone)
+                            startActivity(context, intentTelefono, null)
+                        },
+                        Modifier.align(alignment = Alignment.Bottom)
+                    ) {
+                        Text(
+                            text = phone,
+                            color = Color(0, 68, 129),
+                            modifier = Modifier
+                        )
+                    }
+                    Icon(
+                        Icons.Filled.Person,
+                        contentDescription = null,
+                        tint = Color.Black,
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterVertically)
+                            .padding(start = 14.dp, end = 2.dp)
+                    )
+                    TextButton(
+                        onClick =
+                        { startActivity(context, webIntent, null) }
+                    ) {
+                        Text(
+                            text = "@rubeen._04",
+                            fontStyle = FontStyle.Italic,
+                            color = Color.White
+                        )
+                    }
+                }
+                Row (
+                    Modifier
+                        .align(alignment = Alignment.CenterHorizontally)
+                ) {
+                    IconButton(
+                        onClick = { startActivity(context, intent, null) },
+                        Modifier.align(
+                            alignment = Alignment.CenterVertically
+                        )
+                    ) {
+                        Icon(
+                            Icons.Filled.Email,
+                            contentDescription = null,
+                            tint = Color.Black,
+                            modifier = Modifier
+                                .padding(start = 12.dp)
+                        )
+                    }
+                    TextButton(
+                        onClick = {
+                            val textToCopy = "rubenarranz04@gmail.com"
+                            copyToClipboard(context, textToCopy, "Texto copiado al portapapeles")
+                        },
+                    ) {
+                        Text(
+                            text = stringResource(R.string.correo),
+                            color = Color.White,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    }
+                }
+                Row (
+                    Modifier
+                        .align(alignment = Alignment.CenterHorizontally)
+                ){
+                    Image(
+                        painter = hubGit,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterVertically)
+                            .padding(start = 12.dp)
+                    )
+                    TextButton(
+                        onClick =
+                        { startActivity(context, gitHubIntent, null) },
+                        Modifier.align(alignment = Alignment.CenterVertically)
+                    ) {
+                        Text(
+                            text = "NeburZn",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.align(alignment = Alignment.CenterVertically)
+                        )
+                    }
+                }
             }
             Image(
                 painter = fotoMia,
@@ -144,52 +254,6 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
                 .align(alignment = Alignment.CenterHorizontally)
                 .padding(bottom = 40.dp)
         ) {
-            Image(
-                painter = iconoTelefono,
-                contentDescription = null,
-                modifier = Modifier
-                    .align(alignment = Alignment.CenterVertically)
-            )
-            TextButton(
-                onClick = {
-                    val textPhone = "tel: $phone"
-                    val intentTelefono = Intent(Intent.ACTION_DIAL)
-                    intentTelefono.data = Uri.parse(textPhone)
-                    startActivity(context, intentTelefono, null)
-                },
-                Modifier.align(alignment = Alignment.Bottom)
-            ) {
-                Text(
-                    text = phone,
-                    color = Color(0, 68, 129),
-                    modifier = Modifier
-                )
-            }
-            IconButton(
-                onClick = { startActivity(context, intent, null) },
-                Modifier.align(
-                    alignment = Alignment.CenterVertically
-                )
-            ) {
-                Icon(
-                    Icons.Filled.Email,
-                    contentDescription = null,
-                    tint = Color.Black
-                )
-            }
-            TextButton(
-                onClick = {
-                    val textToCopy = "rubenarranz04@gmail.com"
-                    copyToClipboard(context, textToCopy, "Texto copiado al portapapeles")
-                },
-            ) {
-                Text(
-                    text = stringResource(R.string.correo),
-                    color = Color.White,
-                    textDecoration = TextDecoration.Underline
-                )
-            }
-
         }
     }
 }
@@ -198,11 +262,19 @@ fun PresentacionHorizontal(modifier: Modifier = Modifier) {
 fun PresentacionVertical() {
     val imagen = painterResource(R.drawable.android_logo)
     val fotoMia = painterResource(R.drawable.foto_de_mi)
-    var tamanio = remember{ mutableStateOf(100.dp) }
-    var count = remember { mutableStateOf(0) }
+    val tamanio = remember { mutableStateOf(100.dp) }
+    val count = remember { mutableStateOf(0) }
     val iconoTelefono = painterResource(R.drawable.telefono)
+    val hubGit = painterResource(R.drawable.hub)
     val phone = stringResource(R.string.telefono)
-    var pinchar: Boolean = false
+    val instagramIntent: Intent =
+        Uri.parse("https://www.instagram.com/rubeen._04/?next=%2F").let { webpage ->
+            Intent(Intent.ACTION_VIEW, webpage)
+        }
+    val gitHubIntent: Intent =
+        Uri.parse("https://github.com/NeburZn").let { pagina ->
+            Intent(Intent.ACTION_VIEW, pagina)
+        }
     val context = LocalContext.current
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
@@ -213,7 +285,7 @@ fun PresentacionVertical() {
     Column(
         Modifier
             .background(color = Color.Gray)
-            .padding(top = 90.dp, bottom = 80.dp)
+            .padding(top = 90.dp, bottom = 70.dp)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
@@ -242,7 +314,7 @@ fun PresentacionVertical() {
             Text(
                 text = stringResource(R.string.estudio),
                 color = Color.Green,
-                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                fontStyle = FontStyle.Italic,
                 modifier = Modifier
                     .align(alignment = Alignment.CenterHorizontally)
             )
@@ -252,7 +324,10 @@ fun PresentacionVertical() {
             Image(
                 painter = fotoMia,
                 contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
+                    .border(BorderStroke(3.dp, Color.Black), CircleShape)
+                    .clip(CircleShape)
                     .clickable {
                         tamanio.value =
                             if (count.value % 2 == 0) {
@@ -263,6 +338,8 @@ fun PresentacionVertical() {
                         count.value += 1
                     }
                     .size(tamanio.value)
+                    .padding(3.dp)
+
             )
         }
         Column(
@@ -325,49 +402,55 @@ fun PresentacionVertical() {
                     )
                 }
             }
+            Row(
+                Modifier.align(alignment = Alignment.Start)
+            ) {
+                Icon(
+                    Icons.Filled.Person,
+                    contentDescription = null,
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .align(alignment = Alignment.CenterVertically)
+                        .padding(start = 12.dp, end = 12.dp)
+                )
+                TextButton(
+                    onClick =
+                    { startActivity(context, instagramIntent, null) }
+                ) {
+                    Text(
+                        text = "@rubeen._04",
+                        fontStyle = FontStyle.Italic,
+                        color = Color.White
+                    )
+                }
+            }
+            Row(
+                Modifier
+                    .align(alignment = Alignment.Start)
+            ) {
+                Image(
+                    painter = hubGit,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(alignment = Alignment.CenterVertically)
+                        .padding(start = 12.dp, end = 12.dp)
+                )
+                TextButton(
+                    onClick =
+                    { startActivity(context, gitHubIntent, null) },
+                    Modifier.align(alignment = Alignment.CenterVertically)
+                ) {
+                    Text(
+                        text = "NeburZn",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(alignment = Alignment.CenterVertically)
+                    )
+                }
+            }
         }
     }
 }
-
-
-@Composable
-fun MiFotoGrande(modifier: Modifier): Float {
-    var tamanio: Float = 0.2f
-    var grande: Boolean = false
-    /*
-    Button(
-        onClick = {
-        },
-        modifier = Modifier.fillMaxSize(0.3f)
-    ) {
-        Image(
-            painter = fotoMia,
-            contentDescription = "mi foto",
-            modifier = Modifier.fillMaxSize(2f)
-        )
-    }
-    */
-    return tamanio
-}
-
-@Composable
-fun Prueba() {
-    val phone = "983245897"
-    val context = LocalContext.current
-    TextButton(
-        onClick = {
-            val textPhone = "tel: $phone"
-            val intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse(textPhone)
-            startActivity(context, intent, null)
-        },
-    ) {
-        Text(
-            text = phone,
-        )
-    }
-}
-
 
 @Composable
 fun ProductoFinal() {
@@ -380,11 +463,17 @@ fun ProductoFinal() {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewVertical() {
     TarjetaDePresentacionTheme {
         PresentacionVertical()
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun PreviewHorizontal() {
+    TarjetaDePresentacionTheme {
+        PresentacionHorizontal()
     }
 }
