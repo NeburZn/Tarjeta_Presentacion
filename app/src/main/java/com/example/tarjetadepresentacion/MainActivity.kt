@@ -205,7 +205,7 @@ fun PresentacionHorizontal() {
                     }
                     TextButton(
                         onClick = {
-                            val textToCopy = "rubenarranz04@gmail.com"
+                            val textToCopy = "patataman@gmail.com"
                             copyToClipboard(context, textToCopy, "Texto copiado al portapapeles")
                         },
                     ) {
@@ -278,7 +278,7 @@ fun PresentacionVertical() {
     val context = LocalContext.current
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
-        putExtra(Intent.EXTRA_EMAIL, arrayOf("rubenarranz04@gmail.com")) // recipients
+        putExtra(Intent.EXTRA_EMAIL, arrayOf(stringResource(R.string.correo))) // recipients
         putExtra(Intent.EXTRA_SUBJECT, "Presentación")
         putExtra(Intent.EXTRA_TEXT, "Me merezco un 10 profe")
     }
@@ -391,7 +391,7 @@ fun PresentacionVertical() {
                 }
                 TextButton(
                     onClick = {
-                        val textToCopy = "rubenarranz04@gmail.com"
+                        val textToCopy = "patataman@gmail.com"
                         copyToClipboard(context, textToCopy, "Texto copiado al portapapeles")
                     },
                 ) {
